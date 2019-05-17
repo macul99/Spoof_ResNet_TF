@@ -130,6 +130,7 @@ ap.add_argument("-tfl", "--threshold-false-line", required=True, type=float, hel
 ap.add_argument("-s", "--min-size", required=False, type=int, default=100, help="threshold")
 #ap.add_argument("-of", "--out-folder", required=False, default="output1", help="output folder name")
 ap.add_argument("-um", "--use-mtcnn", required=False, type=int, default=0, help="use mtcnn face detector")
+ap.add_argument("-fdm", "--face-det-model", required=False, default='../mymodels', help="use mtcnn face detector")
 ap.add_argument("-cs", "--crop-scale", required=False, type=float, default=2.5, help="crop scale")
 
 args = vars(ap.parse_args())
@@ -163,9 +164,10 @@ sess_ld, lines_in, pred_out, _, _ = tfSpoofLd.load_pb(pb_path)
 
 useMtcnn = args['use_mtcnn']>0
 if useMtcnn:
-    faceDet = tfMtcnnFaceDet()
+    faceDet = tfMtcnnFaceDet(args['face_det_model']+'/tf_mtcnn/frozen_model_mtcnn_all.pb')
 else:
-    faceDet = tfFaceDet()
+    faceDet = tfFaceDet(args['face_det_model']+'/tf_face_detection/frozen_inference_graph_face.pb')
+
 
 '''
 # install flycapture2
